@@ -41,7 +41,7 @@ def fizzbuzz(n):
     """
     "*** YOUR CODE HERE ***"
     i=1
-    while i<n:
+    while i<=n:
         if i%3==0 and i%5==0:
             print("fizzbuzz")
         elif i%3==0:
