@@ -84,7 +84,13 @@ def interleaved_sum(n, odd_func, even_func):
     True
     """
     "*** YOUR CODE HERE ***"
-
+    def help(k):
+        if k>n:
+            return 0
+        if k==n:
+            return odd_func(k)
+        return odd_func(k)+even_func(k+1)+help(k+2)
+    return help(1)
 
 
 def next_smaller_dollar(bill):
@@ -121,6 +127,28 @@ def count_dollars(total):
     True
     """
     "*** YOUR CODE HERE ***"
+    def f(n,m):
+        if n==0:
+            return 1
+        elif n<0:
+            return 0
+        elif m==1:
+            return 1
+        else:
+            return f(n-m,m)+f(n,next_smaller_dollar(m))
+    if total>=100:
+        bill =100
+    elif total>=50:
+        bill =50
+    elif total>=20:
+        bill =20
+    elif total>=10:
+        bill=10
+    elif total>=5:
+        bill=5
+    else:
+        bill =1
+    return f(total,bill)
 
 
 def next_larger_dollar(bill):
