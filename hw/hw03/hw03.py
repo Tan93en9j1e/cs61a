@@ -25,6 +25,15 @@ def num_eights(n):
     True
     """
     "*** YOUR CODE HERE ***"
+    def is_last_eight(n):
+        if n%10==8:
+            return 1
+        else:
+            return 0
+    if n//10!=0:
+        return is_last_eight(n)+num_eights(n//10)
+    else:
+        return is_last_eight(n)
 
 
 def digit_distance(n):
@@ -180,7 +189,8 @@ def move_stack(n, start, end):
     "*** YOUR CODE HERE ***"
 
 
-from operator import sub, mul
+from operator import sub, mul, truediv
+
 
 def make_anonymous_factorial():
     """Return the value of an expression that computes factorial.
