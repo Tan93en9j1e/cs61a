@@ -106,6 +106,7 @@ def next_smaller_dollar(bill):
     elif bill == 5:
         return 1
 
+
 def count_dollars(total):
     """Return the number of ways to make change.
 
@@ -164,6 +165,7 @@ def next_larger_dollar(bill):
     elif bill == 50:
         return 100
 
+
 def count_dollars_upward(total):
     """Return the number of ways to make change using bills.
 
@@ -185,6 +187,13 @@ def count_dollars_upward(total):
     True
     """
     "*** YOUR CODE HERE ***"
+    def help(n,m):
+        if n==0:
+            return 1
+        if n<0 or m is None:
+            return 0
+        return help(n-m,m)+help(n,next_larger_dollar(m))
+    return help(total,1)
 
 
 def print_move(origin, destination):
@@ -220,6 +229,13 @@ def move_stack(n, start, end):
     """
     assert 1 <= start <= 3 and 1 <= end <= 3 and start != end, "Bad start/end"
     "*** YOUR CODE HERE ***"
+    aid =6-start-end
+    if n ==1:
+        print_move(start,end)
+    else:
+        move_stack(n-1,start,aid)
+        print_move(start,end)
+        move_stack(n-1,aid,end)
 
 
 from operator import sub, mul, truediv
@@ -236,5 +252,5 @@ def make_anonymous_factorial():
     ...     ['Assign', 'AnnAssign', 'AugAssign', 'NamedExpr', 'FunctionDef', 'Recursion'])
     True
     """
-    return 'YOUR_EXPRESSION_HERE'
+    return (lambda f:lambda n:f(f)(n))(lambda f:lambda n: 1 if n ==1 else mul(n,f(f)(sub(n,1))))
 
