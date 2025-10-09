@@ -38,6 +38,14 @@ def pick(paragraphs, select, k):
     """
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
+    selects=[]
+    for i in paragraphs:
+        if select(i):
+            selects.append(i)
+    if k< len(selects):
+        return selects[k]
+    else:
+        return ""
     # END PROBLEM 1
 
 
@@ -58,6 +66,15 @@ def about(subject):
 
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
+    def f(m):
+        m=lower(m)
+        m=remove_punctuation(m)
+        m=split(m)
+        for i in subject:
+            if i in m:
+                return True
+        return False
+    return f
     # END PROBLEM 2
 
 
@@ -77,7 +94,7 @@ def accuracy(typed, source):
     50.0
     >>> accuracy('Cute Dog. I say!', 'Cute Dog.')
     50.0
-    >>> accuracy('Cute', 'Cute Dog.')
+    >>> accuracy('Cute Dog.', 'Cute Dog.')
     100.0
     >>> accuracy('', 'Cute Dog.')
     0.0
@@ -88,6 +105,16 @@ def accuracy(typed, source):
     source_words = split(source)
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
+    if len(source_words)==0 and len(typed_words)==0:
+        return 100.0
+    if len(typed_words)==0:
+        return 0.0
+    correct=0
+    min_length=min(len(source_words),len(typed_words))
+    for i in range(min_length):
+        if typed_words[i]==source_words[i]:
+            correct+=1
+    return (correct/len(typed_words))*100
     # END PROBLEM 3
 
 
@@ -106,6 +133,10 @@ def wpm(typed, elapsed):
     assert elapsed > 0, "Elapsed time must be positive"
     # BEGIN PROBLEM 4
     "*** YOUR CODE HERE ***"
+    l=0.0
+    for _ in typed:
+        l+=1
+    return (l/5)/(elapsed/60)
     # END PROBLEM 4
 
 
