@@ -180,7 +180,6 @@ def partial_reverse(s, start):
         end-=1
 
 
-
 # Tree Data Abstraction
 
 def tree(label, branches=[]):
