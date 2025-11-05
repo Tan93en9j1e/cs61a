@@ -165,6 +165,8 @@ class ThrowerAnt(Ant):
     damage = 1
     # ADD/OVERRIDE CLASS ATTRIBUTES HERE
     food_cost = 3
+    lower_bound=0
+    upper_bound=float('inf')
     def nearest_bee(self):
         """Return the nearest Bee in a Place (that is not the hive) connected to
         the ThrowerAnt's Place by following entrances.
@@ -173,10 +175,14 @@ class ThrowerAnt(Ant):
         """
         # BEGIN Problem 3 and 4
         current = self.place
+        distance=0
         while current is not None:
-            if not current.is_hive and current.bees:
+            if not current.is_hive and current.bees and self.lower_bound <=distance <=self.upper_bound:
                 return random_bee(current.bees)
             current=current.entrance
+            distance+=1
+        return None
+
         return None
         # END Problem 3 and 4
 
@@ -208,8 +214,10 @@ class ShortThrower(ThrowerAnt):
     name = 'Short'
     food_cost = 2
     # OVERRIDE CLASS ATTRIBUTES HERE
+    lower_bound = 0
+    upper_bound = 3
     # BEGIN Problem 4
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem 4
 
 
@@ -219,8 +227,10 @@ class LongThrower(ThrowerAnt):
     name = 'Long'
     food_cost = 2
     # OVERRIDE CLASS ATTRIBUTES HERE
+    lower_bound = 5
+    upper_bound = float('inf')
     # BEGIN Problem 4
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem 4
 
 
@@ -232,7 +242,7 @@ class FireAnt(Ant):
     food_cost = 5
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 5
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem 5
 
     def __init__(self, health=3):
@@ -248,14 +258,48 @@ class FireAnt(Ant):
         """
         # BEGIN Problem 5
         "*** YOUR CODE HERE ***"
+        current =self.place
+        reflect = amount
+        super().reduce_health(amount)
+        if self.health <=0:
+            reflect +=self.damage
+        if current and current.bees:
+            bees =list(current.bees)
+            for bee in bees:
+                bee.reduce_health(reflect)
         # END Problem 5
 
 # BEGIN Problem 6
 # The WallAnt class
+class WallAnt(Ant):
+    name ='Wall'
+    food_cost = 4
+    implemented = True
+    
+    def __init__(self,health=4):
+        super().__init__(health)
 # END Problem 6
 
 # BEGIN Problem 7
 # The HungryAnt Class
+class HungryAnt(Ant):
+    name = 'Hungry'
+    food_cost = 4
+    implemented = True
+    chew_cooldown=3
+    def __init__(self,health=1):
+        super().__init__(health)
+        self.cooldown = 0
+
+    def action(self, gamestate):
+        if self.cooldown>0:
+            self.cooldown-=1
+            return
+        if self.place and self.place.bees:
+            bee =random_bee(self.place.bees)
+            if bee:
+                bee.reduce_health(bee.health)
+                self.cooldown=self.chew_cooldown
 # END Problem 7
 
 
