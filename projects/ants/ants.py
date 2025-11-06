@@ -56,6 +56,7 @@ class Insect:
     next_id = 0  # Every insect gets a unique id number
     damage = 0
     # ADD CLASS ATTRIBUTES HERE
+    is_waterproof = False
 
     def __init__(self, health, place=None):
         """Create an Insect with a health amount and a starting PLACE."""
@@ -104,9 +105,11 @@ class Ant(Insect):
     food_cost = 0
     is_container = False
     # ADD CLASS ATTRIBUTES HERE
+    doubled = False
 
     def __init__(self, health=1):
         super().__init__(health)
+        self.doubled=False
 
     def can_contain(self, other):
         return False
@@ -146,6 +149,9 @@ class Ant(Insect):
         """Double this ants's damage, if it has not already been doubled."""
         # BEGIN Problem 12
         "*** YOUR CODE HERE ***"
+        if not self.doubled:
+            self.damage*=2
+            self.doubled=True
         # END Problem 12
 
 
@@ -397,10 +403,20 @@ class Water(Place):
         its health to 0."""
         # BEGIN Problem 10
         "*** YOUR CODE HERE ***"
+        super().add_insect(insect)
+        if not insect.is_waterproof:
+             insect.reduce_health(insect.health)
         # END Problem 10
 
 # BEGIN Problem 11
 # The ScubaThrower class
+class ScubaThrower(ThrowerAnt):
+    name = 'Scuba'
+    food_cost = 6
+    implemented = True
+    is_waterproof = True
+    def __init__(self,health=1):
+        super().__init__(health)
 # END Problem 11
 
 
@@ -411,8 +427,10 @@ class QueenAnt(ThrowerAnt):
     food_cost = 7
     # OVERRIDE CLASS ATTRIBUTES HERE
     # BEGIN Problem 12
-    implemented = False   # Change to True to view in the GUI
+    implemented = True  # Change to True to view in the GUI]
     # END Problem 12
+    def __init__(self,health=1):
+        super().__init__(health)
 
     def action(self, gamestate):
         """A queen ant throws a leaf, but also doubles the damage of ants
@@ -420,7 +438,20 @@ class QueenAnt(ThrowerAnt):
         """
         # BEGIN Problem 12
         "*** YOUR CODE HERE ***"
+        current=self.place.exit
+        while current is not  None:
+            if current.ant is not None:
+                self.doubles(current.ant)
+            current = current.exit
+
+        super().action(gamestate)
         # END Problem 12
+
+    def doubles(self,ant):
+        if hasattr(ant,'damage')and not getattr(ant,'doubled',False):
+            ant.double()
+        if hasattr(ant,'ant_contained') and ant.ant_contained is not None:
+            self.doubles(ant.ant_contained)
 
     def reduce_health(self, amount):
         """Reduce health by AMOUNT, and if the QueenAnt has no health
@@ -428,6 +459,9 @@ class QueenAnt(ThrowerAnt):
         """
         # BEGIN Problem 12
         "*** YOUR CODE HERE ***"
+        super().reduce_health(amount)
+        if self.health<=0:
+            ants_lose()
         # END Problem 12
 
 
